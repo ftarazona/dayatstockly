@@ -56,13 +56,13 @@ def read_input():
     names = [input() for _ in range(n)]
     return names
 
-def check_empty_words(words):
+def check_empty_suffixes(words):
     """Check that any empty word is at the beginning of the list"""
     encountered_non_empty = False
     for word in words:
-        if encountered_non_empty and len(word) == 0:
+        if encountered_non_empty and len(word) <= 1:
             return False
-        if len(word) > 0:
+        if len(word) > 1:
             encountered_non_empty = True
     return True
 
@@ -90,7 +90,7 @@ def generate_constraints(names):
         groups = [list(g) for _, g in itertools.groupby(names, key=lambda word: word[0])]
         for g in groups:
             if len(g) > 1:
-                if not check_empty_words(g):
+                if not check_empty_suffixes(g):
                     return None
                 g = [word[1:] for word in g if len(word) > 1]
                 lists.append(g)
