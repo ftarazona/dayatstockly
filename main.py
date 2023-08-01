@@ -73,7 +73,10 @@ def generate_constraints(names):
     constraints = set()
     letters = set()
 
-    while len(names) > 0:
+    lists = [names]
+
+    while len(lists) > 0:
+        names = lists.pop()
         order = [name[0] for name in names]
         for i in range(len(order) - 1):
             inf, sup = order[i], order[i + 1]
@@ -85,12 +88,12 @@ def generate_constraints(names):
         # See https://docs.python.org/3/library/itertools.html#itertools.groupby
         # for more information on itertools.grouby
         groups = [list(g) for _, g in itertools.groupby(names, key=lambda word: word[0])]
-        names = []
         for g in groups:
             if len(g) > 1:
                 if not check_empty_words(g):
                     return None
-                names.extend([word[1:] for word in g if len(word) > 1])
+                g = [word[1:] for word in g if len(word) > 1]
+                lists.append(g)
 
     return constraints, letters
 
